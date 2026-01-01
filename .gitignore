@@ -1,0 +1,6 @@
+# 環境変数ファイル
+.env
+srcs/.env
+
+# Mac固有の不要ファイル
+.DS_Store
