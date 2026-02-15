@@ -20,7 +20,7 @@ RUN mkdir -p /etc/nginx/ssl
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
     -keyout /etc/nginx/ssl/inception.key \
     -out /etc/nginx/ssl/inception.crt \
-    -subj "/C=JP/ST=Tokyo/L=Inception/O=42/OU=42/CN=login.42.fr/UID=login"
+    -subj "/C=JP/ST=Tokyo/L=Inception/O=42/OU=42/CN=mizusato.42.fr/UID=mizusato"
 
 # 設定ファイルをコンテナ内にコピー (この後作ります)
 COPY conf/nginx.conf /etc/nginx/nginx.conf
