@@ -1,0 +1,14 @@
+[mysqld]
+# データの保存場所
+datadir = /var/lib/mysql
+# ソケットファイルの場所
+socket  = /run/mysqld/mysqld.sock
+# PIDファイルの場所
+pid-file = /run/mysqld/mysqld.pid
+# 接続を受け付けるポート
+port = 3306
+# ユーザー設定
+user = mysql
+
+# 【重要】外部（WordPressコンテナ）からの接続を許可するため 0.0.0.0 に設定
+bind-address = 0.0.0.0
