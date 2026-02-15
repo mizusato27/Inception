@@ -18,9 +18,15 @@ RUN apt-get update && apt-get install -y \
 # デフォルトの設定(/etc/php/7.4/fpm/pool.d/www.conf)をカスタム設定で置換
 COPY conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
 
-# PHP-FPMを動作させるために必要なディレクトリ作成
+# 起動スクリプトをコピーし、実行権限を付与
+COPY ./tools/docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# PHP-FPM用ディレクトリ作成
 RUN mkdir -p /run/php
 
-# 起動コマンド (仮)
-# ※ 後ほど起動スクリプト(entrypoint)に変更しますが、まずはフォアグラウンド起動で設定
-CMD ["/usr/sbin/php-fpm7.4", "-F"]
+# 作業ディレクトリの設定
+WORKDIR /var/www/html
+
+# ENTRYPOINT でスクリプトを実行する
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
