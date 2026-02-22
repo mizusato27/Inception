@@ -69,11 +69,11 @@ volumes:
       type: none
       o: bind
       # あなたのログイン名に合わせてパスを確認してください (Makefileと一致させる)
-      device: /home/mizusato/data/wordpress
+      device: /home/${LOGIN}/data/wordpress
 
   mariadb_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/mizusato/data/mariadb
+      device: /home/${LOGIN}/data/mariadb
