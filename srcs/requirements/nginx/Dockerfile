@@ -1,10 +1,13 @@
 # ベースイメージ: Debian の "Penultimate Stable" (Bullseye) を使用
 FROM debian:bullseye
 
-# パッケージリストの更新とインストール
+# パッケージリストの更新とインストール、およびキャッシュの即時削除
 # - nginx: Webサーバー本体
 # - openssl: SSL証明書(https用)を作るためのツール
-RUN apt-get update && apt-get install -y nginx openssl
+RUN apt-get update && apt-get install -y \
+    nginx \
+    openssl \
+    && rm -rf /var/lib/apt/lists/*
 
 # SSL証明書を保存するディレクトリを作成
 RUN mkdir -p /etc/nginx/ssl
