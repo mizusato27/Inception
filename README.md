@@ -2,6 +2,7 @@
 
 # Inception
 
+## 目次
 - [Description](#description)
 - [Instructions](#instructions)
 - [Resources](#resources)
@@ -40,13 +41,10 @@ Docker Compose を使用し、特定のルールに基づいて複数のサー�
 	```
 
 ## Resources
-[Docker ドキュメント](https://docs.docker.com/)
-
-[NGINX ドキュメント](https://nginx.org/en/docs/)
-
-[WordPress Codex](https://codex.wordpress.org/Main_Page)
-
-[MariaDB ナレッジベース](https://mariadb.com/docs/)
+- [Docker ドキュメント](https://docs.docker.com/)
+- [NGINX ドキュメント](https://nginx.org/en/docs/)
+- [WordPress Codex](https://codex.wordpress.org/Main_Page)
+- [MariaDB ナレッジベース](https://mariadb.com/docs/)
 
 ## Project Description
 ### 仮想マシン(VM) vs Docker
