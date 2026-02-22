@@ -3,8 +3,10 @@
 # MySQL サービスを開始
 service mariadb start
 
-# MySQL が起動するまで少し待機
-sleep 5
+# MySQL が完全に起動し、通信可能になるまでポーリング（疎通確認）を行う
+while ! mysqladmin ping --silent; do
+    sleep 1
+done
 
 # データベースの作成（存在しない場合）
 mariadb -e "CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;"
