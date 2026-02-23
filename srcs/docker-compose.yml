@@ -1,0 +1,79 @@
+version: '3'
+
+services:
+  mariadb:
+    container_name: mariadb
+    build:
+      context: requirements/mariadb
+      dockerfile: Dockerfile
+    image: mariadb
+    # 環境変数の読み込み
+    env_file:
+      - .env
+    # データの永続化 (名前付きボリュームを使用)
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    # 内部ネットワークへの接続
+    networks:
+      - inception
+    # クラッシュ時の自動再起動
+    restart: always
+
+  wordpress:
+    container_name: wordpress
+    build:
+      context: requirements/wordpress
+      dockerfile: Dockerfile
+    image: wordpress
+    env_file:
+      - .env
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - inception
+    restart: always
+    # MariaDB が起動してから WordPress を起動する
+    depends_on:
+      - mariadb
+
+  nginx:
+    container_name: nginx
+    build:
+      context: requirements/nginx
+      dockerfile: Dockerfile
+    image: nginx
+    env_file:
+      - .env
+    # ポートフォワーディング (ホストの443 -> コンテナの443)
+    ports:
+      - "443:443"
+    volumes:
+      # WordPress の静的ファイルを参照するためにボリュームを共有
+      - wordpress_data:/var/www/html
+    networks:
+      - inception
+    restart: always
+    depends_on:
+      - wordpress
+
+# ネットワークの定義
+networks:
+  inception:
+    driver: bridge
+
+# ボリュームの定義
+volumes:
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      # あなたのログイン名に合わせてパスを確認してください (Makefileと一致させる)
+      device: /home/${LOGIN}/data/wordpress
+
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/${LOGIN}/data/mariadb

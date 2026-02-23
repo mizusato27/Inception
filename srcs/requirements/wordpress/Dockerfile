@@ -14,11 +14,13 @@ RUN apt-get update && apt-get install -y \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# PHP-FPMの設定ファイルを上書き
-# デフォルトの設定(/etc/php/7.4/fpm/pool.d/www.conf)をカスタム設定で置換
-COPY conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
+# WP-CLI のインストール
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+    && chmod +x wp-cli.phar \
+    && mv wp-cli.phar /usr/local/bin/wp
 
-# 起動スクリプトをコピーし、実行権限を付与
+# 設定ファイルとスクリプトの配置
+COPY conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
 COPY ./tools/docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
