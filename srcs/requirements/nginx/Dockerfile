@@ -12,19 +12,6 @@ RUN apt-get update && apt-get install -y \
 # SSL証明書を保存するディレクトリを作成
 RUN mkdir -p /etc/nginx/ssl
 
-# SSL証明書の発行
-# - x509: 証明書の規格
-# - nodes: パスワード入力をスキップ
-# - days 365: 有効期限
-# - newkey rsa:2048: 暗号化方式
-# - keyout: 鍵の保存場所
-# - out: 証明書の保存場所
-# - subj: 所有者情報 (国=JP, 組織=42, 共通名=login.42.fr など)
-RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-    -keyout /etc/nginx/ssl/inception.key \
-    -out /etc/nginx/ssl/inception.crt \
-    -subj "/C=JP/ST=Tokyo/L=Inception/O=42/OU=42/CN=mizusato.42.fr/UID=mizusato"
-
 # 設定ファイルをコンテナ内にコピー
 COPY conf/nginx.conf /etc/nginx/nginx.conf
 
@@ -44,11 +31,9 @@ RUN chmod 755 /var/www/html
 # ディレクトリと配下のファイルの所有者およびグループを 'www-data' に変更する。
 RUN chown -R www-data:www-data /var/www/html
 
-# -----------------------------------------------------------------------------
-# コンテナの起動コマンド
-# -----------------------------------------------------------------------------
-# NGINXをバックグラウンド（デーモン）ではなく、フォアグラウンドプロセスとして起動する。
-# DockerコンテナはPID 1のプロセスが終了するとコンテナ自体も停止してしまうため、
-# 'daemon off;' を指定することでプロセスをブロックし続け、コンテナの稼働を維持する。
-# ※ tail -f や sleep などの無限ループコマンドでコンテナを維持することは禁じられている
-CMD ["nginx", "-g", "daemon off;"]
+# 起動スクリプトのコピーと実行権限の付与
+COPY tools/nginx.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/nginx.sh
+
+# スクリプトを実行
+ENTRYPOINT ["/usr/local/bin/nginx.sh"]
